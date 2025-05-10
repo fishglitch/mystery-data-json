@@ -57,8 +57,11 @@ function howMany2025(button) {
 
       // Update visualization
       updateVisualization(howMany2025.length, ()=> {
-        const statusElement = document.getElementById("status");
-        statusElement.innerHTML = message;
+        // delate message update until after visualization
+        setTimeout(() => {
+          const statusElement = document.getElementById("status");
+          statusElement.innerHTML = message;
+        }, 100); // 100ms delay before reveal
       });
     })
     .catch((error) => {
