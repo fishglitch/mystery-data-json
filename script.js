@@ -16,11 +16,16 @@ function checkFor94110(button) {
       console.log("94110 zip data", zip94110);
 
       // Update the Message for 94110
-      const statusElement = document.getElementById("status");
-      statusElement.innerHTML = `Whoa there are ${zip94110.length} evictions in 94110 rn!!`;
+      const message = `Whoa there are ${zip94110.length} evictions in 94110 rn!!`;
 
       // Update visualization
-      updateVisualization(zip94110.length); 
+      updateVisualization(zip94110.length, () => {
+        // delay message update until after visualization
+        setTimeout(() => {
+          const statusElement = document.getElementById("status");
+          statusElement.innerHTML = message;
+        }, 100); // 100ms delay before reveal
+      });
     })
     .catch((error) => {
       console.error("Error loading JSON:", error);
@@ -48,11 +53,13 @@ function howMany2025(button) {
       console.log("2025 evictions data", howMany2025);
 
       // Update the Message for evictions in 2025
-      const statusElement = document.getElementById("status");
-      statusElement.innerHTML = `Whoa there are ${howMany2025.length} evictions across Frisco in 2025 rn!!`;
+      const message = `Whoa there are ${howMany2025.length} evictions across Frisco in 2025 rn!!`;
 
       // Update visualization
-      updateVisualization(howMany2025.length);
+      updateVisualization(howMany2025.length, ()=> {
+        const statusElement = document.getElementById("status");
+        statusElement.innerHTML = message;
+      });
     })
     .catch((error) => {
       console.error("Error loading JSON:", error);
@@ -82,20 +89,21 @@ function createAsteriskRows() {
 }
 
 // Update the asterisks visualization based on the count
-function updateVisualization(count) {
+function updateVisualization(count, callback) {
     allAsterisks.forEach((asterisk) => {
         asterisk.classList.remove("highlighted");
     });
 
-    // for (let i = 0; i < count; i++) {
-    //     allAsterisks[i].classList.add("highlighted");
-    // }
 
       // Function to highlight asterisks one at a time
   const highlightAsterisks = (i) => {
     if (i < count) {
       allAsterisks[i].classList.add("highlighted");
-      setTimeout(() => highlightAsterisks(i + 1), 5);  // Delay of 500ms between highlights
+      setTimeout(() => highlightAsterisks(i + 1), 5);  // Delay of X-ms between highlights
+    } else {
+        if (callback) {
+            callback(); // Call the callback function after highlighting
+        }   
     }
   };
 
