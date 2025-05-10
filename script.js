@@ -87,9 +87,19 @@ function updateVisualization(count) {
         asterisk.classList.remove("highlighted");
     });
 
-    for (let i = 0; i < count; i++) {
-        allAsterisks[i].classList.add("highlighted");
+    // for (let i = 0; i < count; i++) {
+    //     allAsterisks[i].classList.add("highlighted");
+    // }
+
+      // Function to highlight asterisks one at a time
+  const highlightAsterisks = (i) => {
+    if (i < count) {
+      allAsterisks[i].classList.add("highlighted");
+      setTimeout(() => highlightAsterisks(i + 1), 5);  // Delay of 500ms between highlights
     }
+  };
+
+  highlightAsterisks(0);  // Start highlighting from the 0th index
 }
 
 // Call to create asterisk rows on page load
